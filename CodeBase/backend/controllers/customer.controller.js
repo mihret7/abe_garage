@@ -247,7 +247,6 @@ async function searchedCustomerController(req, res) {
 
 
 
-
 // Export all controllers to be used in routing or elsewhere
 module.exports = {
   createCustomerController,
