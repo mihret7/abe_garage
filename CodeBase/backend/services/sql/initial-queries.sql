@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `customer_identifier` (
   `customer_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_email` varchar(255) NOT NULL,
   `customer_phone_number` varchar(255) NOT NULL,
-  `customer_added_date` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `customer_added_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `customer_hash` varchar(255) NOT NULL,
   PRIMARY KEY (customer_id),
   UNIQUE (customer_email)
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `employee_id` int(11) NOT NULL AUTO_INCREMENT,
   `employee_email` varchar(255) NOT NULL,
   `active_employee` int(11) NOT NULL,
-  `added_date` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `added_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (employee_id), 
   UNIQUE (employee_email)
 ) ENGINE=InnoDB;
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `employee_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `vehicle_id` int(11) NOT NULL,
-  `order_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `order_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `active_order` int(11) NOT NULL,
   `order_hash` varchar(255) NOT NULL,
   `order_description` varchar(255),
@@ -106,8 +106,8 @@ CREATE TABLE IF NOT EXISTS `order_info` (
   `order_info_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
   `order_total_price` int(11) NOT NULL,
-  `estimated_completion_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  `completion_date` DATETIME,
+  `estimated_completion_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `completion_date` TIMESTAMP NULL,
   `additional_request` TEXT,
   `notes_for_internal_use` TEXT,
   `notes_for_customer` TEXT,
@@ -143,10 +143,10 @@ INSERT INTO employee (employee_email, active_employee, added_date)
 VALUES ('admin@admin.com', 1, CURRENT_TIMESTAMP);
 
 INSERT INTO employee_info (employee_id, employee_first_name, employee_last_name, employee_phone)
-VALUES (1, 'Admin', 'Admin', 555-555-5555); 
+VALUES (1, 'Admin', 'Admin', '555-555-5555'); 
 
 INSERT INTO employee_pass (employee_id, employee_password_hashed)
 VALUES (1, '$2b$10$IvJ5wR7of2NqrZ4ZyTsLp.KMFgygZVviYLZbuuS6PT.7VOvM9PySy');  
 
 INSERT INTO employee_role (employee_id, company_role_id)
-VALUES (1, 3); 
+VALUES (1, 3);  
