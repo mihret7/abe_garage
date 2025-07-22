@@ -1,0 +1,53 @@
+
+/* General/Home */
+a {
+  text-decoration: none !important;
+}
+/* Admin Menu */
+.admin-left-side {
+    background-color:#222b48;
+  }
+  .admin-right-side {
+    background: rgb(246 247 250);
+    border-bottom: 1px solid #dfe2ec;
+  }
+  .admin-menu {
+    background: #1e2331;
+    padding: 10px 20px;
+  }
+  .admin-left-side .list-group-item.active {
+    z-index: 2;
+    color: #fff;
+    background-color: #3c404c;
+    border-color: #3c404c;
+    border-bottom: 1px solid #616675;
+  }
+  .admin-menu h2 {
+    font-size: 21px;
+    font-weight: 300;
+    line-height: 50px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgb(249, 249, 249);
+    display: block;
+    text-decoration: none;
+  }
+  .admin-left-side.col-md-3 {
+    padding: 0;
+  }
+  .admin-left-side .list-group-item {
+    background-color: #222b48;
+    border-bottom: 1px solid #616675;
+    margin-bottom: 0px;
+    color: #fff;
+  }
+  .admin-left-side a {
+    color: #a2a5ad;
+  }
+  .admin-left-side a:hover {
+    color: #fff;
+  }
+.list-group a {
+    border: none;
+  }
+  

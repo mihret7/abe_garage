@@ -1,21 +1,18 @@
 // import express
 const express = require("express");
-// import dotenv
-require("dotenv").config();
-// import body-parser
+
+//  create web server
+const app = express();
+
+//  import body-parser
 const bodyParser = require("body-parser");
-// import cors
+
+//  import cors
 const cors = require("cors");
 
-// import routes
-const routes = require("./routes/index");
 
-
-
-
-
-// create express web server
-const app = express();
+//  import dotenv
+require("dotenv").config();
 
 // Enable CORS middleware
 app.use(cors());
@@ -24,15 +21,19 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // create a port from env file
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000 
 
-// Add the routes to the application as middleware
+//  import routes
+const routes = require("./routes/index");
+
+
+//  Add the routes to the application as middleware
 app.use(routes);
 
 
-
+//  Add a simple route to test the server
 app.get("/", (req, res) => {
-  res.send("check");
+  res.send("I'm working fine");
 });
 
 
@@ -41,6 +42,7 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(` listening on http://localhost:${port}`);
 });
+
 
 
 // export app

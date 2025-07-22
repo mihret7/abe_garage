@@ -1,31 +1,60 @@
-// import the promise-based version of the mysql2 module
+// Load environment variables from a .env file into process.env
+require("dotenv").config();
+
+// Import the mysql2 package (using the promise-based API)
 const mysql = require("mysql2/promise");
 
-// define database connection settings using environment variables
+// Define database configuration using environment variables
 const dbConfig = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  connectionLimit: 10,
+  host: process.env.DB_HOST, // Database host
+  user: process.env.DB_USER, // Database username
+  password: process.env.DB_PASSWORD, // Database password
+  database: process.env.DB_NAME, // Database name
+  connectionLimit: 10, // Maximum number of connections in the pool
 };
 
-// initialize a connection pool using the defined configuration
+// Create a connection pool with the defined configuration
 const pool = mysql.createPool(dbConfig);
 
-// define an asynchronous function to run SQL queries using the connection pool
-async function query(sql, params) {
+// Function to test the database connection
+async function testConnection() {
   try {
-    // execute the SQL statement with optional parameters and extract the rows
-    const [rows] = await pool.execute(sql, params);
+    // Get a connection from the pool
+    const connection = await pool.getConnection();
+    console.log("Connected to the database successfully.");
 
-    // return the query result as an object containing the rows
-    return { rows };
-  } catch (error) {
-    console.error("Error executing query:", error);
-    throw error; // rethrow the error to be handled by the calling function
+    // Release the connection back to the pool
+    connection.release();
+  } catch (err) {
+    // Log connection error and exit the application
+    console.error("Unable to connect to the database:", err.message);
+    process.exit(1);
   }
 }
 
-// export the query function for use in other modules
-module.exports = { query };
+// Function to execute a SQL query with optional parameters
+async function query(sql, params) {
+  try {
+    // Execute the SQL query with provided parameters
+    const [rows, fields] = await pool.execute(sql, params);
+
+    // Return the retrieved rows
+    return rows;
+    
+  } catch (error) {
+
+    // Log any error that occurs during query execution
+    console.error("Error executing query:", error);
+
+    // Rethrow the error to be handled by the caller
+    throw error;
+  }
+}
+
+// Call the function to test the connection when this file runs
+testConnection();
+
+// Export the query function to be used in other modules
+module.exports = {
+  query,
+};

@@ -1,27 +1,30 @@
-// import the install service module responsible for database setup operations
+// Import the install service that handles DB table creation logic
 const installService = require("../services/install.service");
 
-// define the install handler function to manage installation requests
+
+
+// *** Create a controller function to handle the installation request *** //
+
 async function install(req, res, next) {
-  // invoke the install service to initiate table creation
-  // store the returned message to determine if the installation succeeded or failed
+  // Call the install method from the service to create tables
+  // Capture the returned message (success/failure info)
   const installMessage = await installService.install();
 
-  // evaluate the response and return a corresponding status to the client
+  // Check if the installation was successful based on status code
   if (installMessage.status === 200) {
-    // return success response with message
+    // If successful, send a success response to the client
     res.status(200).json({
       message: installMessage,
     });
   } else {
-    // return error response with message
+    // If there was an error, send a failure response
     res.status(500).json({
       message: installMessage,
     });
   }
 }
 
-// export the install function for use in the route definition
+// Export the install function so it can be used in route definitions
 module.exports = {
-  install,
+  install
 };

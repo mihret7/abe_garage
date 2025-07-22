@@ -1,84 +1,104 @@
-// import the query function from the database configuration module
+// Import the query function to execute SQL queries from dbConfig file
 const { query } = require("../config/db.config");
 
-// import the filesystem module to read SQL file content
+// Use the fs module to read files from the filesystem
 const fs = require("fs");
 
-// import the path module to handle file path resolution
+// Use path module to handle file paths
 const path = require("path");
 
-// define an asynchronous function to create database tables
+// **** function to create database tables by executing SQL statements from a file **** //
 async function install() {
-  // resolve the full path to the initial SQL file
+
+  // the path to the SQL file containing the table creation queries
   const sqlFilePath = path.join(__dirname, "sql/initial-queries.sql");
 
-  // variables to store SQL queries and the final response message
+  // Variables to hold individual SQL queries and final status message
   let queries = [];
   let finalMessage = {};
-  let tempLine = ""; // used to accumulate lines for a full SQL statement
+  let tempLine = ""; // Temporarily accumulates lines to form complete SQL queries
 
   try {
-    // read the content of the SQL file
+    // Read the entire SQL file content as UTF-8 string
     const fileContent = fs.readFileSync(sqlFilePath, "utf-8");
+
+    // Split the file content into lines
     const lines = fileContent.split("\n");
 
-    // process each line to build complete SQL statements
+    // Use a promise to asynchronously process lines and build queries array
     const executed = await new Promise((resolve, reject) => {
-      // iterate through each line in the SQL file
+
+      // Loop through each line in the SQL file
       lines.forEach((line) => {
-        // skip comments and empty lines
+        // Ignore lines that are comments (start with '--') or are empty
         if (line.trim().startsWith("--") || line.trim() === "") {
           return;
         }
 
-        // accumulate the current line
+        // Append current line to tempLine to accumulate multi-line queries
         tempLine += line;
 
-        // when a line ends with ';', treat it as the end of a SQL statement
+        // When a line ends with ';' this indicates end of a SQL query
         if (line.trim().endsWith(";")) {
-          // trim and push the complete SQL statement to the list
+
+          // Trim and store the complete query
           const sqlQuery = tempLine.trim();
+
+          // Add this complete query to the queries array
           queries.push(sqlQuery);
-          // reset for the next query
+
+          // Reset tempLine for next query
           tempLine = "";
         }
       });
 
-      // finish building the query list
-      resolve("Queries are added to the list ");
+      // After processing all lines, resolve the promise
+      resolve("Queries are added to the list");
     });
 
-    // execute each SQL query one by one
+
+
+
+
+
+    // Loop through the prepared queries and execute each asynchronously
     for (let i = 0; i < queries.length; i++) {
       try {
-        // run the query using the database connection
+        // Execute each SQL query using the query function from db config
         const result = await query(queries[i]);
         console.log("Table Created");
       } catch (error) {
-        // on error, update the final message with failure info
+        // If an error occurs, log it and prepare a failure message
         finalMessage.message = "Not all tables are not created";
         console.error("Error creating table:", error.message);
       }
     }
 
-    // if no errors occurred, set success message
+
+
+
+    // If no errors were recorded, set success message and status
     if (!finalMessage.message) {
       finalMessage.message = "All tables are created successfully";
       finalMessage.status = 200;
     } else {
-      // otherwise, indicate failure status
+      // Otherwise, set failure status
       finalMessage.status = 500;
     }
   } catch (error) {
-    // handle file read errors
+    // Catch errors related to reading the SQL file and log them
     console.error("Error reading the SQL file:", error.message);
     finalMessage.message = "Error reading the SQL file";
     finalMessage.status = 500;
   }
 
-  // return the final result message
+  // Return the final result message to the caller (controller)
   return finalMessage;
 }
 
-// export the install function to be used in the controller
+
+
+
+
+// Export the install function to be used in the install controller
 module.exports = { install };

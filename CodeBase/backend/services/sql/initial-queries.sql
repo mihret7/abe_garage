@@ -95,6 +95,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `order_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `active_order` int(11) NOT NULL,
   `order_hash` varchar(255) NOT NULL,
+  `order_description` varchar(255),
   PRIMARY KEY (order_id),
   FOREIGN KEY (employee_id) REFERENCES employee(employee_id), 
   FOREIGN KEY (customer_id) REFERENCES customer_identifier(customer_id),
@@ -137,15 +138,15 @@ CREATE TABLE IF NOT EXISTS `order_status` (
 INSERT INTO company_roles (company_role_name)
 VALUES ('Employee'), ('Manager'), ('Admin');
 
--- -- This is the admin account 
-  -- INSERT INTO employee (employee_email, active_employee, added_date)
-  -- VALUES ('admin@admin.com', 1, CURRENT_TIMESTAMP);
+-- This is the admin account 
+INSERT INTO employee (employee_email, active_employee, added_date)
+VALUES ('admin@admin.com', 1, CURRENT_TIMESTAMP);
 
-  -- INSERT INTO employee_info (employee_id, employee_first_name, employee_last_name, employee_phone)
-  -- VALUES (1, 'Admin', 'Admin', 555-555-5555); 
+INSERT INTO employee_info (employee_id, employee_first_name, employee_last_name, employee_phone)
+VALUES (1, 'Admin', 'Admin', 555-555-5555); 
 
-  -- INSERT INTO employee_pass (employee_id, employee_password_hashed)
-  -- VALUES (1, '$2b$10$B6yvl4hECXploM.fCDbXz.brkhmgqNlawh9ZwbfkFX.F3xrs.15Xi');  
+INSERT INTO employee_pass (employee_id, employee_password_hashed)
+VALUES (1, '$2b$10$IvJ5wR7of2NqrZ4ZyTsLp.KMFgygZVviYLZbuuS6PT.7VOvM9PySy');  
 
-  -- INSERT INTO employee_role (employee_id, company_role_id)
-  -- VALUES (1, 3); 
+INSERT INTO employee_role (employee_id, company_role_id)
+VALUES (1, 3); 
